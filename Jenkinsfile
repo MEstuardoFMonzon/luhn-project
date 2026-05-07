@@ -22,15 +22,15 @@ pipeline {
 
         stage('Build & Deploy Preproducción') {
             steps {
-                sh 'docker compose -f docker-compose.preprod.yml down'
-                sh 'docker compose -f docker-compose.preprod.yml up -d --build'
+                sh 'docker compose -p luhn-preprod -f docker-compose.preprod.yml down'
+                sh 'docker compose -p luhn-preprod -f docker-compose.preprod.yml up -d --build'
             }
         }
 
         stage('Build & Deploy Producción') {
             steps {
-                sh 'docker compose -f docker-compose.prod.yml down'
-                sh 'docker compose -f docker-compose.prod.yml up -d --build'
+                sh 'docker compose -p luhn-prod -f docker-compose.prod.yml down'
+                sh 'docker compose -p luhn-prod -f docker-compose.prod.yml up -d --build'
             }
         }
     }
