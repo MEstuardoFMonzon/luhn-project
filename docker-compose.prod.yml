@@ -1,0 +1,53 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: luhn_db_prod
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: luhndb
+    volumes:
+      - db_data_prod:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - luhn_network_prod
+
+  adminer:
+    image: adminer
+    container_name: luhn_adminer_prod
+    ports:
+      - "8081:8080"
+    networks:
+      - luhn_network_prod
+
+  backend:
+    build: ./backend
+    container_name: luhn_backend_prod
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: luhndb
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - luhn_network_prod
+
+  frontend:
+    build: ./frontend
+    container_name: luhn_frontend_prod
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - luhn_network_prod
+
+networks:
+  luhn_network_prod:
+    driver: bridge
+
+volumes:
+  db_data_prod:
