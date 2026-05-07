@@ -1,6 +1,3 @@
-const request = require('supertest');
-
-// Mock de pg para que no intente conectarse a la BD
 jest.mock('pg', () => {
   const mPool = {
     query: jest.fn().mockResolvedValue({ rows: [] }),
@@ -8,7 +5,12 @@ jest.mock('pg', () => {
   return { Pool: jest.fn(() => mPool) };
 });
 
-const app = require('./index');
+const { app, server } = require('./index');
+const request = require('supertest');
+
+afterAll((done) => {
+  server.close(done);
+});
 
 describe('Algoritmo de Luhn', () => {
   test('número válido retorna valido: true', async () => {

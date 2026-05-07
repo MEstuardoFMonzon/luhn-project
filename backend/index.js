@@ -43,6 +43,6 @@ app.post('/validar', async (req, res) => {
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
-app.listen(3000, () => console.log('Backend corriendo en puerto 3000'));
+const server = app.listen(3000, () => console.log('Backend corriendo en puerto 3000'));
 
-module.exports = app;
+module.exports = { app, server };
